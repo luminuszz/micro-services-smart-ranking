@@ -2,6 +2,7 @@ import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { createPlayerDTO } from '../dtos/createPlayer.dto'
 import { Player } from '../interfaces/player.interface'
 import { v4 as uuidV4 } from 'uuid'
+import { formatterJSON } from '@shared/utils/formatters'
 
 @Injectable()
 export class PlayersService {
@@ -21,7 +22,7 @@ export class PlayersService {
       avatarUrl: 'algo aqui',
       rakingPosition: 5,
     }
-    this.logger.log(newPlayer)
+    this.logger.debug(` player -> ${formatterJSON(newPlayer)}`)
     this.players.push(newPlayer)
     return newPlayer
   }
