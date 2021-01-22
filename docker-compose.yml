@@ -13,8 +13,11 @@ services:
   database:
     container_name: api_smart_ranking_db
     image: mongo
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: docker
-      MONGO_INITDB_ROOT_PASSWORD: docker
     ports:
-    - "27017:27017"
+    - ${MONGO_PORT}:${MONGO_PORT}
+
+  redis_data_base:
+    container_name: api_smart_ranking_redis_db
+    image: redis:5.0.10-alpine
+    ports:
+      - '6379:6379'
