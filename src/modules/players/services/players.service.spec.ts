@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 import { Test, TestingModule } from '@nestjs/testing'
 import { createPlayerDTO } from '../dtos/createPlayer.dto'
 import { PlayersService } from './players.service'
@@ -6,13 +5,21 @@ import * as faker from 'faker'
 import { BadRequestException } from '@nestjs/common'
 import { TestUtils } from '@shared/utils/testUtils'
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
+import { PlayerRepository } from '../repositories/player.repository'
+import { FakePlayerRepository } from '../repositories/mock/player.repository.fake'
 
 describe('PlayersService', () => {
   let service: PlayersService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [PlayersService],
+      providers: [
+        PlayersService,
+        {
+          provide: PlayerRepository,
+          useClass: FakePlayerRepository,
+        },
+      ],
     }).compile()
 
     service = module.get<PlayersService>(PlayersService)
