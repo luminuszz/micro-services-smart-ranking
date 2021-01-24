@@ -4,12 +4,17 @@ import { createPlayerDTO } from '../dtos/createPlayer.dto'
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
 import { IPlayerRepository } from '../interfaces/playerRepository.inteface'
 import { Player } from '../schemas/user.schema'
+import { ObjectID } from 'mongodb'
 
 @Injectable()
 @EntityRepository(Player)
 export class PlayerRepository
   extends MongoRepository<Player>
   implements IPlayerRepository {
+  private transpileObjectId(id: string): ObjectID {
+    return new ObjectID(id)
+  }
+
   async createPlayer(createPlayer: createPlayerDTO): Promise<Player> {
     const newPlayer = this.create(createPlayer)
 
@@ -22,8 +27,6 @@ export class PlayerRepository
     return await this.find()
   }
 
-  g
-
   async getPlayerById(id: string): Promise<Player> {
     const foundedPlayer = await this.findOne(id)
 
@@ -31,7 +34,7 @@ export class PlayerRepository
   }
 
   async getPlayerByEmail(email: string): Promise<Player> {
-    const foundedPlayer = await this.findOne({ where: { email } })
+    const foundedPlayer = await this.findOne({ email })
 
     return foundedPlayer
   }
@@ -39,15 +42,15 @@ export class PlayerRepository
   async updatePlayer(updatePlayer: updatePlayerDto): Promise<Player> {
     const { _id, ...fields } = updatePlayer
 
-    const { value: changedPlayer } = await this.findOneAndUpdate(
-      { id: _id },
-      { ...fields }
+    await this.findOneAndUpdate(
+      { _id: this.transpileObjectId(_id) },
+      { $set: { ...fields } }
     )
 
-    return changedPlayer
+    return await this.findOne(_id)
   }
 
   async deletePlayer(id: string): Promise<void> {
-    await this.findOneAndDelete({ id })
+    await this.findOneAndDelete({ _id: this.transpileObjectId(id) })
   }
 }

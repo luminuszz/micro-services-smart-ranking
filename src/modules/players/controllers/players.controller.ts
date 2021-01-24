@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseUUIDPipe,
+  Post,
+  Put,
+} from '@nestjs/common'
+import { ParseObjectID } from '@shared/pipes/parsedObjectId.pipe'
 import { createPlayerDTO } from '../dtos/createPlayer.dto'
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
 import { Player } from '../interfaces/player.interface'
@@ -42,5 +52,10 @@ export class PlayersController {
   ): Promise<Player> {
     const changedPlayer = await this.playersService.updatePlayer(updatedPlayer)
     return changedPlayer
+  }
+
+  @Delete(':id')
+  async deletePlayer(@Param('id', ParseObjectID) id: string): Promise<void> {
+    await this.playersService.deletePlayer(id)
   }
 }
