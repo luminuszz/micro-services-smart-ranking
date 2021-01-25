@@ -42,15 +42,12 @@ export class PlayerRepository
   async updatePlayer(updatePlayer: updatePlayerDto): Promise<Player> {
     const { _id, ...fields } = updatePlayer
 
-    await this.findOneAndUpdate(
-      { _id: this.transpileObjectId(_id) },
-      { $set: { ...fields } }
-    )
+    await this.findOneAndUpdate({ _id }, { $set: { ...fields } })
 
     return await this.findOne(_id)
   }
 
   async deletePlayer(id: string): Promise<void> {
-    await this.findOneAndDelete({ _id: this.transpileObjectId(id) })
+    await this.findOneAndDelete({ _id: id })
   }
 }

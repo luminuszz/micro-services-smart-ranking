@@ -1,14 +1,15 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
   Get,
   Param,
-  ParseUUIDPipe,
   Post,
   Put,
 } from '@nestjs/common'
-import { ParseObjectID } from '@shared/pipes/parsedObjectId.pipe'
+
+import { ParseObjectIDPipe } from '@shared/pipes/parsedObjectId.pipe'
 import { createPlayerDTO } from '../dtos/createPlayer.dto'
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
 import { Player } from '../interfaces/player.interface'
@@ -30,7 +31,7 @@ export class PlayersController {
 
   @Get(':id')
   async getOnePlayerById(
-    @Param('id')
+    @Param('id', ParseObjectIDPipe)
     id?: string
   ): Promise<Player | undefined> {
     const player = await this.playersService.getOnePlayerById(id)
@@ -55,7 +56,13 @@ export class PlayersController {
   }
 
   @Delete(':id')
-  async deletePlayer(@Param('id', ParseObjectID) id: string): Promise<void> {
+  async deletePlayer(
+    @Param('id', ParseObjectIDPipe)
+    id: string
+  ): Promise<void> {
+    if (!id) {
+      throw new BadRequestException('id is required')
+    }
     await this.playersService.deletePlayer(id)
   }
 }
