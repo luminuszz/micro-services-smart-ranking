@@ -12,7 +12,7 @@ import {
 import { ParseObjectIDPipe } from '@shared/pipes/parsedObjectId.pipe'
 import { createPlayerDTO } from '../dtos/createPlayer.dto'
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
-import { Player } from '../interfaces/player.interface'
+import { Player } from '../schemas/player.schema'
 import { PlayersService } from '../services/players.service'
 
 @Controller(`api/v1/players`)

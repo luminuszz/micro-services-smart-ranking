@@ -3,7 +3,7 @@ import { createPlayerDTO } from '../dtos/createPlayer.dto'
 
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
 
-import { Player } from '../schemas/user.schema'
+import { Player } from '../schemas/player.schema'
 
 import { PlayerRepository } from '../repositories/player.repository'
 

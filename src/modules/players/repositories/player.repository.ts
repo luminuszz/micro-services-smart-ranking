@@ -3,7 +3,7 @@ import { EntityRepository, MongoRepository } from 'typeorm'
 import { createPlayerDTO } from '../dtos/createPlayer.dto'
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
 import { IPlayerRepository } from '../interfaces/playerRepository.inteface'
-import { Player } from '../schemas/user.schema'
+import { Player } from '../schemas/player.schema'
 import { ObjectID } from 'mongodb'
 
 @Injectable()

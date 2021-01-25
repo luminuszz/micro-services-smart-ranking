@@ -1,16 +1,18 @@
-import { BadRequestException, PipeTransform } from '@nestjs/common'
+import {
+  BadRequestException,
+  PipeTransform,
+  UnauthorizedException,
+} from '@nestjs/common'
 import { ObjectID } from 'mongodb'
 
 export class ParseObjectIDPipe implements PipeTransform {
-  transform(id: string): ObjectID {
-    if (!id) {
-      throw new BadRequestException('id is not be empty')
-    }
-
+  async transform(id: string): Promise<ObjectID> {
     const validateObjectId = ObjectID.isValid(id)
 
+    console.log('validateObjectId', validateObjectId)
+
     if (!validateObjectId) {
-      throw new BadRequestException('is not valid id')
+      throw new UnauthorizedException('is not valid id')
     }
 
     return new ObjectID(id)

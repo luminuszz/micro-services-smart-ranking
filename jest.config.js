@@ -10,6 +10,7 @@ module.exports = {
   collectCoverageFrom: [
     '<rootDir>/src/modules/**/services/*.ts',
     '<rootDir>/src/modules/**/controllers/*.ts',
+    '<rootDir>/src/**/**/*.pipe.ts',
   ],
   coverageDirectory: 'coverage',
   coverageReporters: ['text-summary', 'lcov'],

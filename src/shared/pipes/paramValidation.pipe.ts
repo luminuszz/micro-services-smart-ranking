@@ -1,13 +1,15 @@
 import {
   ArgumentMetadata,
   BadRequestException,
+  Logger,
   PipeTransform,
 } from '@nestjs/common'
-import { Console } from 'console'
 
 export class ParamValidationPipe implements PipeTransform {
+  private logger = new Logger()
+
   transform(value: string, { data, type }: ArgumentMetadata): string {
-    console.log('pipe value', `this ${value}`)
+    this.logger.log(value)
 
     if (type !== 'param') {
       throw new Error('This pipe is used only with ParamDecorator')
