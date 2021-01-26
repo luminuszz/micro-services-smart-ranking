@@ -8,7 +8,10 @@ import {
 export class ParamValidationPipe implements PipeTransform {
   private logger = new Logger()
 
-  transform(value: string, { data, type }: ArgumentMetadata): string {
+  async transform(
+    value: string,
+    { data, type }: ArgumentMetadata
+  ): Promise<string> {
     this.logger.log(value)
 
     if (type !== 'param') {

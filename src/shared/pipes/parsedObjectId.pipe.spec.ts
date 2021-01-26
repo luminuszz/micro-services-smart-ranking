@@ -1,6 +1,6 @@
 import { ParseObjectIDPipe } from './parsedObjectId.pipe'
 import { ObjectID } from 'mongodb'
-import { BadRequestException, UnauthorizedException } from '@nestjs/common'
+import { UnauthorizedException } from '@nestjs/common'
 import * as faker from 'faker'
 
 describe('ParseObjectIDPipe', () => {

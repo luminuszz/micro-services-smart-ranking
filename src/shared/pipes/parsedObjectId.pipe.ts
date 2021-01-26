@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  PipeTransform,
-  UnauthorizedException,
-} from '@nestjs/common'
+import { PipeTransform, UnauthorizedException } from '@nestjs/common'
 import { ObjectID } from 'mongodb'
 
 export class ParseObjectIDPipe implements PipeTransform {
