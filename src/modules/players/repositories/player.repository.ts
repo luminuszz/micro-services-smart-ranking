@@ -1,40 +1,36 @@
 import { Injectable } from '@nestjs/common'
-import { EntityRepository, MongoRepository } from 'typeorm'
 import { createPlayerDTO } from '../dtos/createPlayer.dto'
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
 import { IPlayerRepository } from '../interfaces/playerRepository.inteface'
-import { Player } from '../schemas/player.schema'
-import { ObjectID } from 'mongodb'
+import { Player, PlayerDocument } from '../schemas/player.schema'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
 
 @Injectable()
-@EntityRepository(Player)
-export class PlayerRepository
-  extends MongoRepository<Player>
-  implements IPlayerRepository {
-  private transpileObjectId(id: string): ObjectID {
-    return new ObjectID(id)
-  }
+export class PlayerRepository implements IPlayerRepository {
+  constructor(
+    @InjectModel(Player.name)
+    private readonly playerModel: Model<PlayerDocument>
+  ) {}
 
   async createPlayer(createPlayer: createPlayerDTO): Promise<Player> {
-    const newPlayer = this.create(createPlayer)
-
-    await this.save(newPlayer)
+    const newPlayer = await this.playerModel.create(createPlayer)
 
     return newPlayer
   }
 
   async getAllPlayers(): Promise<Player[]> {
-    return await this.find()
+    return await this.playerModel.find()
   }
 
   async getPlayerById(id: string): Promise<Player> {
-    const foundedPlayer = await this.findOne(id)
+    const foundedPlayer = await this.playerModel.findOne({ id })
 
     return foundedPlayer
   }
 
   async getPlayerByEmail(email: string): Promise<Player> {
-    const foundedPlayer = await this.findOne({ email })
+    const foundedPlayer = await this.playerModel.findOne({ email })
 
     return foundedPlayer
   }
@@ -42,12 +38,12 @@ export class PlayerRepository
   async updatePlayer(updatePlayer: updatePlayerDto): Promise<Player> {
     const { _id, ...fields } = updatePlayer
 
-    await this.findOneAndUpdate({ _id }, { $set: { ...fields } })
+    await this.playerModel.findOneAndUpdate({ _id }, { $set: { ...fields } })
 
-    return await this.findOne(_id)
+    return await this.playerModel.findOne({ _id })
   }
 
   async deletePlayer(id: string): Promise<void> {
-    await this.findOneAndDelete({ _id: id })
+    await this.playerModel.findOneAndDelete({ _id: id })
   }
 }

@@ -1,4 +1,5 @@
-import { Controller, Get, Post } from '@nestjs/common'
+import { Body, Controller, Get, Logger, Post } from '@nestjs/common'
+import { formatterJSON } from '@shared/utils/formatters'
 import { createCategoryDTO } from '../dtos/createCategory.dto'
 import { Category } from '../schemas/category.schema'
 import { CategoriesService } from '../services/categories.service'
@@ -8,10 +9,11 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  async createCategory(createCategory: createCategoryDTO): Promise<Category> {
-    const newCategory = await this.categoriesService.createAndSave(
-      createCategory
-    )
+  async createCategory(
+    @Body()
+    data: createCategoryDTO
+  ): Promise<Category> {
+    const newCategory = await this.categoriesService.createAndSave(data)
 
     return newCategory
   }

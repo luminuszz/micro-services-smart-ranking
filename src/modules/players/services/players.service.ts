@@ -3,9 +3,8 @@ import { createPlayerDTO } from '../dtos/createPlayer.dto'
 
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
 
-import { Player } from '../interfaces/player.interface'
-
 import { PlayerRepository } from '../repositories/player.repository'
+import { Player } from '../schemas/player.schema'
 
 @Injectable()
 export class PlayersService {

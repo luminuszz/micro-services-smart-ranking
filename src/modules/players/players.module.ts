@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common'
-import { TypeOrmModule } from '@nestjs/typeorm'
+import { MongooseModule } from '@nestjs/mongoose'
 import { PlayersController } from './controllers/players.controller'
-import { PlayerRepository } from './repositories/player.repository'
 import { PlayersService } from './services/players.service'
+import { PlayerEntityFeature } from './schemas/player.schema'
+import { PlayerRepository } from './repositories/player.repository'
 
 @Module({
-  imports: [TypeOrmModule.forFeature([PlayerRepository])],
+  imports: [MongooseModule.forFeature([PlayerEntityFeature])],
   controllers: [PlayersController],
-  providers: [PlayersService],
+  providers: [PlayersService, PlayerRepository],
 })
 export class PlayersModule {}

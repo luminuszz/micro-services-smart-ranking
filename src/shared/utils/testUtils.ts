@@ -1,7 +1,8 @@
 import { createCategoryDTO } from '@modules/categories/dtos/createCategory.dto'
-import { Event } from '@modules/categories/interfaces/event.interface'
+import { Event } from '@modules/categories/interfaces/category.interface'
 import { createPlayerDTO } from '@modules/players/dtos/createPlayer.dto'
 import * as Faker from 'faker'
+import { v4 } from 'uuid'
 
 export class TestUtils {
   static getValidPlayerDTO(): createPlayerDTO {
@@ -14,6 +15,7 @@ export class TestUtils {
 
   static getValidCategoryDTO(): createCategoryDTO {
     const newEvent: Event = {
+      _id: v4(),
       name: Faker.name.jobTitle(),
       operation: Faker.random.word(),
       value: Faker.random.number(),

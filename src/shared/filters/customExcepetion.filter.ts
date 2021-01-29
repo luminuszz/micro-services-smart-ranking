@@ -29,11 +29,11 @@ export class GlobalException implements ExceptionFilter {
 
     response.status(httpStatus).json({
       statusCode: httpStatus || '400',
+      exceptionResponse: exceptionResponse.message,
       path: request.url,
       method: request.method,
       args,
 
-      exceptionResponse: exceptionResponse.message,
       timeStamp: new Date().toUTCString(),
     })
   }

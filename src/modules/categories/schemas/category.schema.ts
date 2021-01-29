@@ -1,35 +1,42 @@
 import { Player } from '@modules/players/schemas/player.schema'
-import { EntityBase } from '@shared/entities/EntityBase.entity'
-import { Column, Entity } from 'typeorm'
+import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose'
+import { Document } from 'mongoose'
+
+const categoriesOptions: SchemaOptions = {
+  collection: 'categories',
+  timestamps: true,
+}
 
 class Event {
-  @Column()
+  @Prop({ required: true })
   name: string
 
-  @Column()
+  @Prop({ required: true })
   operation: string
 
-  @Column()
+  @Prop({ required: true })
   value: number
-
-  constructor(name: string, operation: string, value: number) {
-    this.name = name
-    this.operation = operation
-    this.value = value
-  }
 }
 
-@Entity('categories')
-export class Category extends EntityBase {
-  @Column()
-  readonly category: string
+@Schema(categoriesOptions)
+class Category {
+  @Prop({ unique: true, required: true })
+  category: string
 
-  @Column()
+  @Prop({ required: true })
   description: string
 
-  @Column(_type => Event)
+  @Prop([Event])
   events: Event[]
 
-  @Column(_type => Player)
+  @Prop([Player])
   players: Player[]
 }
+
+const CategorySchema = SchemaFactory.createForClass(Category)
+
+const CategoryEntityFeature = { name: Category.name, schema: CategorySchema }
+
+type CategoryDocument = Category & Document
+
+export { CategoryEntityFeature, CategoryDocument, Category, Event }

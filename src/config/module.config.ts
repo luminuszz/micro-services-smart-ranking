@@ -1,11 +1,8 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm'
+import { MongooseModuleOptions } from '@nestjs/mongoose'
 
-export const TypeOrmConfigModule: TypeOrmModuleOptions = {
-  type: 'mongodb',
-  host: 'database',
-  port: 27017,
-  useUnifiedTopology: true,
+export const mongooseModuleOptions: MongooseModuleOptions = {
   useNewUrlParser: true,
-  database: 'acesmartranking',
-  entities: ['dist/**/schemas/*.schema.js'],
+  useCreateIndex: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
 }

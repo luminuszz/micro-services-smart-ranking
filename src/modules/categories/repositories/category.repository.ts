@@ -1,16 +1,19 @@
-import { EntityRepository, MongoRepository } from 'typeorm'
 import { createCategoryDTO } from '../dtos/createCategory.dto'
 import { ICategoryRepository } from '../interfaces/categoryRepository.interface'
-import { Category } from '../schemas/category.schema'
+import { CategoryDocument, Category } from '../schemas/category.schema'
+import { InjectModel } from '@nestjs/mongoose'
+import { Injectable } from '@nestjs/common'
+import { Model } from 'mongoose'
 
-@EntityRepository(Category)
-export class CategoryRepository
-  extends MongoRepository<Category>
-  implements ICategoryRepository {
+@Injectable()
+export class CategoryRepository implements ICategoryRepository {
+  constructor(
+    @InjectModel(Category.name)
+    private readonly categoryModel: Model<CategoryDocument>
+  ) {}
+
   async createAndSave(createCategory: createCategoryDTO): Promise<Category> {
-    const newCategory = this.create(createCategory)
-
-    await this.save(newCategory)
+    const newCategory = await this.categoryModel.create(createCategory)
 
     return newCategory
   }
@@ -18,13 +21,15 @@ export class CategoryRepository
   async findCategoryByName(
     categoryName: string
   ): Promise<Category | undefined> {
-    const foundedCategory = await this.findOne({ category: categoryName })
+    const foundedCategory = await this.categoryModel.findOne({
+      category: categoryName,
+    })
 
     return foundedCategory
   }
 
   async getAllCategories(): Promise<Category[]> {
-    const categories = await this.find()
+    const categories = await this.categoryModel.find()
 
     return categories
   }

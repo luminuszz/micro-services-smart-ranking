@@ -11,9 +11,9 @@ export class CategoriesService {
   private logger = new Logger()
 
   async createAndSave(createCategory: createCategoryDTO): Promise<Category> {
-    const { category } = createCategory
+    this.logger.log('teste')
 
-    this.logger.debug(createCategory)
+    const { category } = createCategory
 
     const checkCategoryExists = await this.categoryRepository.findCategoryByName(
       category

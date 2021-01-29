@@ -1,19 +1,20 @@
 import { createCategoryDTO } from '@modules/categories/dtos/createCategory.dto'
 import { ICategoryRepository } from '@modules/categories/interfaces/categoryRepository.interface'
-import { Category } from '@modules/categories/schemas/category.schema'
+import { Category } from '@modules/categories/interfaces/category.interface'
 import { v4 } from 'uuid'
 
 export class FakeCategoryRepository implements ICategoryRepository {
   private categories: Category[] = []
 
   async createAndSave(createCategory: createCategoryDTO): Promise<Category> {
-    const newCategory: Category = {
+    const newCategory = new Category({
       ...createCategory,
-      _id: v4(),
+      id: v4(),
       createdAt: new Date(),
-      updateAt: new Date(),
+      updatedAt: new Date(),
       players: [],
-    }
+      events: createCategory.events.map(event => ({ ...event, _id: v4() })),
+    })
 
     this.categories.push(newCategory)
 

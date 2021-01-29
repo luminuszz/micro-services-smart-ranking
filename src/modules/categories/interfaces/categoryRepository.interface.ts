@@ -1,8 +1,13 @@
 import { createCategoryDTO } from '../dtos/createCategory.dto'
-import { Category } from '../schemas/category.schema'
+import { Category } from '../interfaces/category.interface'
+import { Category as MongoCategoryModel } from '../schemas/category.schema'
 
 export interface ICategoryRepository {
-  createAndSave(createCategory: createCategoryDTO): Promise<Category>
-  findCategoryByName(categoryName: string): Promise<Category | undefined>
-  getAllCategories(): Promise<Category[]>
+  createAndSave(
+    createCategory: createCategoryDTO
+  ): Promise<Category | MongoCategoryModel>
+  findCategoryByName(
+    categoryName: string
+  ): Promise<Category | MongoCategoryModel>
+  getAllCategories(): Promise<Category[] | MongoCategoryModel[]>
 }

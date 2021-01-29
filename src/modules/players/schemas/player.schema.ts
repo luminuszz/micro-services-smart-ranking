@@ -1,23 +1,36 @@
-import { EntityBase } from '@shared/entities/EntityBase.entity'
-import { Column, Entity } from 'typeorm'
+import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose'
+import { Model, Document } from 'mongoose'
 
-@Entity('players')
-export class Player extends EntityBase {
-  @Column()
+const PlayerOptions: SchemaOptions = {
+  collection: 'players',
+  timestamps: true,
+}
+
+@Schema(PlayerOptions)
+class Player {
+  @Prop({ required: true })
   name: string
 
-  @Column()
+  @Prop({ required: true })
   email: string
 
-  @Column()
+  @Prop({ required: true })
   ranking: string
 
-  @Column()
+  @Prop({ required: true })
   rankingPosition: number
 
-  @Column()
+  @Prop({ required: true })
   avatarUrl: string
 
-  @Column()
+  @Prop({ required: true })
   phoneNumber: string
 }
+
+const PlayerSchema = SchemaFactory.createForClass(Player)
+
+const PlayerEntityFeature = { name: Player.name, schema: PlayerSchema }
+
+type PlayerDocument = Player & Document
+
+export { Player, PlayerDocument, PlayerEntityFeature }
