@@ -1,6 +1,8 @@
-import { IBaseEntity } from '@shared/interfaces/baseEntity.interface'
+import { Document } from 'mongoose'
 
-export class Player extends IBaseEntity {
+export class Player extends Document {
+  _id: string
+
   name: string
 
   email: string
@@ -12,4 +14,7 @@ export class Player extends IBaseEntity {
   avatarUrl: string
 
   phoneNumber: string
+
+  createdAt: Date
+  updateAt: Date
 }

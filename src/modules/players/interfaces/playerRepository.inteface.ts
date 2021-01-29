@@ -1,6 +1,6 @@
 import { createPlayerDTO } from '../dtos/createPlayer.dto'
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
-import { Player } from '../schemas/player.schema'
+import { Player } from '../interfaces/player.interface'
 
 export interface IPlayerRepository {
   createPlayer(createPlayer: createPlayerDTO): Promise<Player>

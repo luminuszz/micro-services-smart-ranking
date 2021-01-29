@@ -15,7 +15,7 @@ export class FakePlayerRepository implements IPlayerRepository {
   async createPlayer(createPlayer: createPlayerDTO): Promise<Player> {
     const { email, name, phoneNumber } = createPlayer
 
-    const newPlayer: Player = {
+    const newPlayer = {
       email,
       name,
       phoneNumber,
@@ -25,7 +25,7 @@ export class FakePlayerRepository implements IPlayerRepository {
       ranking: Faker.random.words(),
       avatarUrl: Faker.internet.avatar(),
       rankingPosition: Faker.random.number(),
-    }
+    } as Player
 
     this.players.push(newPlayer)
 

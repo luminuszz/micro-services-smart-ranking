@@ -1,6 +1,7 @@
 import { Player } from '@modules/players/schemas/player.schema'
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose'
 import { Document } from 'mongoose'
+import { Category as CategoryInterface } from '../interfaces/category.interface'
 
 const categoriesOptions: SchemaOptions = {
   collection: 'categories',
@@ -37,6 +38,6 @@ const CategorySchema = SchemaFactory.createForClass(Category)
 
 const CategoryEntityFeature = { name: Category.name, schema: CategorySchema }
 
-type CategoryDocument = Category & Document
+type CategoryDocument = CategoryInterface & Document
 
 export { CategoryEntityFeature, CategoryDocument, Category, Event }

@@ -7,14 +7,17 @@ export class FakeCategoryRepository implements ICategoryRepository {
   private categories: Category[] = []
 
   async createAndSave(createCategory: createCategoryDTO): Promise<Category> {
-    const newCategory = new Category({
-      ...createCategory,
-      id: v4(),
-      createdAt: new Date(),
-      updatedAt: new Date(),
+    const { category, description, events, players } = createCategory
+
+    const newCategory = {
+      _id: v4(),
+      category,
+      description,
+      events: events.map(event => ({ ...event, _id: v4() })),
       players: [],
-      events: createCategory.events.map(event => ({ ...event, _id: v4() })),
-    })
+      createdAt: new Date(),
+      updateAt: new Date(),
+    } as Category
 
     this.categories.push(newCategory)
 

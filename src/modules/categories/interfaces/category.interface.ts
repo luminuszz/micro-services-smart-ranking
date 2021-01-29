@@ -1,7 +1,16 @@
 import { Player } from '@modules/players/schemas/player.schema'
 import { Document } from 'mongoose'
 
+class Event {
+  _id: string
+  name: string
+  operation: string
+  value: number
+}
+
 class Category extends Document {
+  _id: string
+
   category: string
 
   description: string
@@ -9,13 +18,10 @@ class Category extends Document {
   events: Event[]
 
   players: Player[]
-}
 
-class Event {
-  _id: string
-  name: string
-  operation: string
-  value: number
+  createdAt: Date
+
+  updateAt: Date
 }
 
 export { Category, Event }
