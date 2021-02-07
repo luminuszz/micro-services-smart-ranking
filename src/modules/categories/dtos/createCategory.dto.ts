@@ -1,7 +1,6 @@
 import { Player } from '@modules/players/interfaces/player.interface'
 import {
   IsStringNotEmpty,
-  IsNumberNotEmpty,
   IsArrayNotEmpty,
 } from '@shared/decorators/generalValidations.decorator'
 import { IsArray, IsOptional } from 'class-validator'
@@ -15,6 +14,7 @@ export class createCategoryDTO {
   @IsStringNotEmpty()
   description: string
 
+  @IsOptional()
   @IsArrayNotEmpty()
   events: createEvent[]
 

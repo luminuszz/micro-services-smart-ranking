@@ -1,4 +1,5 @@
 import { createCategoryDTO } from '@modules/categories/dtos/createCategory.dto'
+import { UpdateCategoryDTO } from '@modules/categories/dtos/updateCategory.dto'
 import { Event } from '@modules/categories/interfaces/category.interface'
 import { createPlayerDTO } from '@modules/players/dtos/createPlayer.dto'
 import * as Faker from 'faker'
@@ -25,7 +26,15 @@ export class TestUtils {
       category: Faker.name.title(),
       description: Faker.random.words(50),
       events: [newEvent],
-      value: Faker.random.number(),
+      players: [],
+    }
+  }
+
+  static getValidUpdateCategoryDTO(): UpdateCategoryDTO {
+    return {
+      categoryId: v4(),
+      description: Faker.random.words(30),
+      events: [],
     }
   }
 }

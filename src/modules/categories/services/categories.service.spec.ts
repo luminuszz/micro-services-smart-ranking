@@ -60,4 +60,75 @@ describe('CategoriesService', () => {
       expect(categories).toHaveLength(3)
     })
   })
+
+  describe('findCategoryByName', () => {
+    it('should be able to get a category by Name', async () => {
+      const categoryDTO = TestUtils.getValidCategoryDTO()
+
+      const newCategory = await service.createAndSave(categoryDTO)
+
+      const foundedCategory = await service.getOneCategoryByName(
+        newCategory.category
+      )
+
+      expect(foundedCategory).toHaveProperty('_id')
+    })
+
+    it('should be able Return one Exception if category not found by name', async () => {
+      await expect(
+        service.getOneCategoryByName('NOT EXISTS CATEGORY')
+      ).rejects.toBeInstanceOf(BadRequestException)
+    })
+  })
+
+  describe('findCategoryById', () => {
+    it('should be able to get a category by id', async () => {
+      const categoryDTO = TestUtils.getValidCategoryDTO()
+
+      const newCategory = await service.createAndSave(categoryDTO)
+
+      const foundedCategory = await service.getOneCategoryById(newCategory.id)
+
+      expect(foundedCategory).toHaveProperty('_id')
+    })
+
+    it('should be able Return one Exception if category not found by id', async () => {
+      await expect(
+        service.getOneCategoryById('NOT EXISTS ID')
+      ).rejects.toBeInstanceOf(BadRequestException)
+    })
+  })
+
+  describe('updateCategory', () => {
+    it('should be able to update one category', async () => {
+      const newCategory = TestUtils.getValidCategoryDTO()
+
+      const { id } = await service.createAndSave(newCategory)
+
+      const updateCategoryValues = TestUtils.getValidUpdateCategoryDTO()
+
+      updateCategoryValues.categoryId = id
+      updateCategoryValues.description = 'Descrição atualizada'
+
+      const category = await service.updateCategory(updateCategoryValues)
+
+      expect(category.description).toBe('Descrição atualizada')
+      expect(category.events).toHaveLength(1)
+    })
+
+    it('not should be able update category if category  not found', async () => {
+      const newCategory = TestUtils.getValidCategoryDTO()
+
+      await service.createAndSave(newCategory)
+
+      const updateCategoryValues = TestUtils.getValidUpdateCategoryDTO()
+
+      updateCategoryValues.categoryId = 'Invalid Id'
+      updateCategoryValues.description = 'Descrição atualizada'
+
+      await expect(
+        service.updateCategory(updateCategoryValues)
+      ).rejects.toBeInstanceOf(BadRequestException)
+    })
+  })
 })

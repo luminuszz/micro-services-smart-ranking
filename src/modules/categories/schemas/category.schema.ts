@@ -1,6 +1,6 @@
 import { Player } from '@modules/players/schemas/player.schema'
 import { Prop, Schema, SchemaFactory, SchemaOptions } from '@nestjs/mongoose'
-import { Document } from 'mongoose'
+import { Document, Schema as MongooseSchema } from 'mongoose'
 import { Category as CategoryInterface } from '../interfaces/category.interface'
 
 const categoriesOptions: SchemaOptions = {
@@ -8,6 +8,7 @@ const categoriesOptions: SchemaOptions = {
   timestamps: true,
 }
 
+@Schema()
 class Event {
   @Prop({ required: true })
   name: string
@@ -30,7 +31,7 @@ class Category {
   @Prop([Event])
   events: Event[]
 
-  @Prop([Player])
+  @Prop([MongooseSchema.Types.ObjectId, { ref: Player.name }])
   players: Player[]
 }
 

@@ -5,6 +5,7 @@ const { compilerOptions } = require('./tsconfig.json')
 
 module.exports = {
   clearMocks: true,
+  verbose: true,
   collectCoverage: true,
   preset: 'ts-jest',
   collectCoverageFrom: [

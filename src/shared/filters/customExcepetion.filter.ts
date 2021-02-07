@@ -21,9 +21,14 @@ export class GlobalException implements ExceptionFilter {
     const response = ctx.getResponse<Response>()
     const request = ctx.getRequest<Request>()
 
-    const exceptionResponse = exception.getResponse() as Record<any, string>
+    if (!exception.getResponse) {
+      response.status(500).json({ exception })
+      return
+    }
 
-    const httpStatus = exception.getStatus()
+    const exceptionResponse = exception?.getResponse() as Record<any, string>
+
+    const httpStatus = exception?.getStatus()
 
     const args = this.getValidObject(request)
 

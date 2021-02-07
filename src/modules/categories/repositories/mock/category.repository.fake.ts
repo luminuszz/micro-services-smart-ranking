@@ -2,12 +2,29 @@ import { createCategoryDTO } from '@modules/categories/dtos/createCategory.dto'
 import { ICategoryRepository } from '@modules/categories/interfaces/categoryRepository.interface'
 import { Category } from '@modules/categories/interfaces/category.interface'
 import { v4 } from 'uuid'
+import { UpdateCategoryDTO } from '@modules/categories/dtos/updateCategory.dto'
 
 export class FakeCategoryRepository implements ICategoryRepository {
   private categories: Category[] = []
 
+  async updateCategory(
+    updateCategoryValues: UpdateCategoryDTO
+  ): Promise<Category> {
+    const { categoryId, description, events } = updateCategoryValues
+
+    const foundCategoryIndex = this.categories.findIndex(
+      category => category.id === categoryId
+    )
+
+    events.map(event => this.categories[foundCategoryIndex].events.push(event))
+
+    this.categories[foundCategoryIndex].description = description
+
+    return this.categories[foundCategoryIndex]
+  }
+
   async createAndSave(createCategory: createCategoryDTO): Promise<Category> {
-    const { category, description, events, players } = createCategory
+    const { category, description, events } = createCategory
 
     const newCategory = {
       _id: v4(),
@@ -36,5 +53,13 @@ export class FakeCategoryRepository implements ICategoryRepository {
 
   async getAllCategories(): Promise<Category[]> {
     return this.categories
+  }
+
+  async findCategoryById(categoryId: string): Promise<Category | Category> {
+    const foundCategory = this.categories.find(
+      category => category.id === categoryId
+    )
+
+    return foundCategory
   }
 }
