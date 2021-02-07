@@ -11,6 +11,8 @@ export class TestUtils {
       email: Faker.internet.email(),
       name: Faker.name.firstName(),
       phoneNumber: Faker.phone.phoneNumber(),
+      ranking: Faker.random.word(),
+      rankingPosition: Faker.random.number(50),
     }
   }
 

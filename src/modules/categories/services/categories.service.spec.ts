@@ -1,22 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { CategoryRepository } from '../repositories/category.repository'
+import { CategoryRepository } from '../repositories'
 import { CategoriesService } from './categories.service'
-import { FakeCategoryRepository } from '../repositories/mock/category.repository.fake'
 import { TestUtils } from '@shared/utils/testUtils'
 import { BadRequestException } from '@nestjs/common'
+import { PlayersService } from '@modules/players/services/players.service'
+import { PlayerRepository } from '@modules/players/repositories'
 
 describe('CategoriesService', () => {
   let service: CategoriesService
+  let playerService: PlayersService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CategoriesService,
-        { provide: CategoryRepository, useClass: FakeCategoryRepository },
+        CategoryRepository,
+        PlayersService,
+        PlayerRepository,
       ],
     }).compile()
 
     service = module.get<CategoriesService>(CategoriesService)
+    playerService = module.get<PlayersService>(PlayersService)
   })
 
   describe('createAndSave', () => {
@@ -129,6 +134,25 @@ describe('CategoriesService', () => {
       await expect(
         service.updateCategory(updateCategoryValues)
       ).rejects.toBeInstanceOf(BadRequestException)
+    })
+  })
+
+  describe('addPlayerToCategory', () => {
+    it('should be able to add player to one Category', async () => {
+      const newPlayer = TestUtils.getValidPlayerDTO()
+      const newCategory = TestUtils.getValidCategoryDTO()
+
+      const { id: playerId } = await playerService.createPlayer(newPlayer)
+      const { category: categoryName } = await service.createAndSave(
+        newCategory
+      )
+
+      const category = await service.addPlayerToCategory({
+        categoryName,
+        playerId,
+      })
+
+      expect(category).toHaveProperty('id')
     })
   })
 })

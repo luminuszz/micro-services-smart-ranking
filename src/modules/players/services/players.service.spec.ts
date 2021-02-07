@@ -1,25 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing'
-import { createPlayerDTO } from '../dtos/createPlayer.dto'
 import { PlayersService } from './players.service'
-import * as faker from 'faker'
 import { BadRequestException } from '@nestjs/common'
 import { TestUtils } from '@shared/utils/testUtils'
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
-import { PlayerRepository } from '../repositories/player.repository'
-import { FakePlayerRepository } from '../repositories/mock/player.repository.fake'
+import { PlayerRepository } from '../repositories'
 
 describe('PlayersService', () => {
   let service: PlayersService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        PlayersService,
-        {
-          provide: PlayerRepository,
-          useClass: FakePlayerRepository,
-        },
-      ],
+      providers: [PlayersService, PlayerRepository],
     }).compile()
 
     service = module.get<PlayersService>(PlayersService)
@@ -27,11 +18,7 @@ describe('PlayersService', () => {
 
   describe('createPlayer', () => {
     it('should be able to create a new player', async () => {
-      const newPlayer: createPlayerDTO = {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
+      const newPlayer = TestUtils.getValidPlayerDTO()
 
       const createdPlayer = await service.createPlayer(newPlayer)
 
@@ -42,21 +29,15 @@ describe('PlayersService', () => {
     })
 
     it('not should be able to create a new player if email already exists', async () => {
-      const newPlayer: createPlayerDTO = {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
+      const newPlayer = TestUtils.getValidPlayerDTO()
 
       const { email: alreadyRegisterEmail } = await service.createPlayer(
         newPlayer
       )
 
-      const newPlayer2: createPlayerDTO = {
-        email: alreadyRegisterEmail,
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
+      const newPlayer2 = TestUtils.getValidPlayerDTO()
+
+      newPlayer2.email = alreadyRegisterEmail
 
       await expect(service.createPlayer(newPlayer2)).rejects.toBeInstanceOf(
         BadRequestException
@@ -66,16 +47,8 @@ describe('PlayersService', () => {
 
   describe('getAllPlayers', () => {
     it('should be able to get all players', async () => {
-      const newPlayer: createPlayerDTO = {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
-      const newPlayer2: createPlayerDTO = {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
+      const newPlayer = TestUtils.getValidPlayerDTO()
+      const newPlayer2 = TestUtils.getValidPlayerDTO()
 
       await service.createPlayer(newPlayer)
       await service.createPlayer(newPlayer2)
@@ -88,11 +61,7 @@ describe('PlayersService', () => {
 
   describe('getOnePlayerByEmail', () => {
     it('should be able to get one Player', async () => {
-      const newPlayer: createPlayerDTO = {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
+      const newPlayer = TestUtils.getValidPlayerDTO()
 
       const savedPlayer = await service.createPlayer(newPlayer)
 
@@ -102,11 +71,7 @@ describe('PlayersService', () => {
     })
 
     it('not should be able to get one player if him not exists', async () => {
-      const newPlayer: createPlayerDTO = {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
+      const newPlayer = TestUtils.getValidPlayerDTO()
       await service.createPlayer(newPlayer)
 
       const findPlayer = await service.getOnePlayerByEmail('INVALID_EMAIL')
@@ -117,11 +82,7 @@ describe('PlayersService', () => {
 
   describe('getOnePlayerById', () => {
     it('should be able to get one Player', async () => {
-      const newPlayer: createPlayerDTO = {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
+      const newPlayer = TestUtils.getValidPlayerDTO()
 
       const savedPlayer = await service.createPlayer(newPlayer)
 
@@ -131,11 +92,7 @@ describe('PlayersService', () => {
     })
 
     it('not should be able to get one player if him not exists', async () => {
-      const newPlayer: createPlayerDTO = {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
+      const newPlayer = TestUtils.getValidPlayerDTO()
       await service.createPlayer(newPlayer)
 
       const findPlayer = await service.getOnePlayerById('INVALID_ID')
@@ -146,18 +103,9 @@ describe('PlayersService', () => {
 
   describe('deletePlayer', () => {
     it('should able to delete one user', async () => {
-      const newPlayer: createPlayerDTO = {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
+      const newPlayer = TestUtils.getValidPlayerDTO()
 
-      const newPlayer2: createPlayerDTO = {
-        email: faker.internet.email(),
-        name: faker.name.findName(),
-        phoneNumber: faker.phone.phoneNumberFormat(),
-      }
-
+      const newPlayer2 = TestUtils.getValidPlayerDTO()
       await service.createPlayer(newPlayer)
       const player = await service.createPlayer(newPlayer2)
 

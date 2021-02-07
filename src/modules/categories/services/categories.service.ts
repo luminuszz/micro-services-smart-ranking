@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common'
 import { createCategoryDTO } from '../dtos/createCategory.dto'
-
-import { CategoryRepository } from '../repositories/category.repository'
 import { Category } from '../interfaces/category.interface'
 import { notFoundExceptionMessage } from '@shared/resources/exceptions'
 import { UpdateCategoryDTO } from '../dtos/updateCategory.dto'
+import { AddPlayerCategoryParamsDTO } from '../dtos/addPlayerCategory.dto'
+import { ICategoryRepository } from '../repositories/categoryRepository.interface'
 
 @Injectable()
 export class CategoriesService {
-  constructor(private readonly categoryRepository: CategoryRepository) {}
+  constructor(private readonly categoryRepository: ICategoryRepository) {}
 
   async createAndSave(createCategory: createCategoryDTO): Promise<Category> {
     const { category } = createCategory
@@ -77,5 +77,11 @@ export class CategoriesService {
     )
 
     return updatedCategory
+  }
+
+  async addPlayerToCategory(
+    addPlayerToCategoryParams: AddPlayerCategoryParamsDTO
+  ): Promise<Category> {
+    throw new Error('method not implemented')
   }
 }

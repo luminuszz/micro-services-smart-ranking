@@ -13,7 +13,9 @@ export function injectResolver(
 ): Provider {
   const provide = abstraction
 
-  switch (process.env.NODE) {
+  console.log('process.env.APP_ENV', process.env.APP_ENV)
+
+  switch (process.env.APP_ENV) {
     case 'development':
       return { provide, useClass: development }
 
@@ -24,6 +26,6 @@ export function injectResolver(
       }
 
     default:
-      return { provide, useClass: development }
+      return { provide, useClass: testing }
   }
 }

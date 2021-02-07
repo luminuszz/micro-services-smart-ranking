@@ -1,11 +1,26 @@
 import { createCategoryDTO } from '@modules/categories/dtos/createCategory.dto'
-import { ICategoryRepository } from '@modules/categories/interfaces/categoryRepository.interface'
+import { ICategoryRepository } from '@modules/categories/repositories/categoryRepository.interface'
 import { Category } from '@modules/categories/interfaces/category.interface'
 import { v4 } from 'uuid'
 import { UpdateCategoryDTO } from '@modules/categories/dtos/updateCategory.dto'
+import { AddPlayerCategoryParamsDTO } from '@modules/categories/dtos/addPlayerCategory.dto'
 
 export class FakeCategoryRepository implements ICategoryRepository {
   private categories: Category[] = []
+
+  async addPlayerToCategory(
+    addPlayerToCategory: AddPlayerCategoryParamsDTO
+  ): Promise<Category> {
+    const { categoryName, playerId } = addPlayerToCategory
+
+    const currentCategoryIndex = this.categories.findIndex(
+      category => category.category === categoryName
+    )
+
+    this.categories[currentCategoryIndex].players.push(playerId)
+
+    return this.categories[currentCategoryIndex]
+  }
 
   async updateCategory(
     updateCategoryValues: UpdateCategoryDTO

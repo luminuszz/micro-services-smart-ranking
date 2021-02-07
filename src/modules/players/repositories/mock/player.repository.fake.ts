@@ -1,6 +1,6 @@
 import { createPlayerDTO } from '@modules/players/dtos/createPlayer.dto'
 import { updatePlayerDto } from '@modules/players/dtos/updatePlayer.dto'
-import { IPlayerRepository } from '@modules/players/interfaces/playerRepository.inteface'
+import { IPlayerRepository } from '../playerRepository.inteface'
 import { Player } from '@modules/players/interfaces/player.interface'
 import * as Faker from 'faker'
 import { v4 as uuidV4 } from 'uuid'

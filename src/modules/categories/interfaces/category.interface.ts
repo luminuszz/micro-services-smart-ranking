@@ -1,4 +1,3 @@
-import { Player } from '@modules/players/schemas/player.schema'
 import { Document } from 'mongoose'
 
 class Event {
@@ -17,7 +16,7 @@ class Category extends Document {
 
   events: Event[]
 
-  players: Player[]
+  players: string[]
 
   createdAt: Date
 

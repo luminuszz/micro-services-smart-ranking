@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common'
-import { createPlayerDTO } from '../dtos/createPlayer.dto'
-import { updatePlayerDto } from '../dtos/updatePlayer.dto'
-import { IPlayerRepository } from '../interfaces/playerRepository.inteface'
-import { PlayerDocument } from '../schemas/player.schema'
+import { createPlayerDTO } from '../../dtos/createPlayer.dto'
+import { updatePlayerDto } from '../../dtos/updatePlayer.dto'
+import { IPlayerRepository } from '../playerRepository.inteface'
+import { PlayerDocument } from '../../schemas/player.schema'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { Player } from '../interfaces/player.interface'
+import { Player } from '../../interfaces/player.interface'
 
 @Injectable()
 export class PlayerRepository implements IPlayerRepository {

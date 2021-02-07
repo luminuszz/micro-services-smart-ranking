@@ -1,5 +1,4 @@
 import { ArgumentsHost, ExceptionFilter, HttpException } from '@nestjs/common'
-import { formatterJSON } from '@shared/utils/formatters'
 import { Response, Request } from 'express'
 
 export class GlobalException implements ExceptionFilter {

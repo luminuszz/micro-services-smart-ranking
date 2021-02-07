@@ -21,7 +21,7 @@ class Player {
   @Prop({ required: true })
   rankingPosition: number
 
-  @Prop({ required: true })
+  @Prop()
   avatarUrl: string
 
   @Prop({ required: true })

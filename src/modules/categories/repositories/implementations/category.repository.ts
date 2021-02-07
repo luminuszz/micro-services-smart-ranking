@@ -1,11 +1,12 @@
-import { createCategoryDTO } from '../dtos/createCategory.dto'
-import { ICategoryRepository } from '../interfaces/categoryRepository.interface'
-import { CategoryDocument } from '../schemas/category.schema'
-import { Category } from '../interfaces/category.interface'
+import { createCategoryDTO } from '../../dtos/createCategory.dto'
+import { ICategoryRepository } from '../categoryRepository.interface'
+import { CategoryDocument } from '../../schemas/category.schema'
+import { Category } from '../../interfaces/category.interface'
 import { InjectModel } from '@nestjs/mongoose'
 import { Injectable } from '@nestjs/common'
 import { Model } from 'mongoose'
-import { UpdateCategoryDTO } from '../dtos/updateCategory.dto'
+import { UpdateCategoryDTO } from '../../dtos/updateCategory.dto'
+import { AddPlayerCategoryParamsDTO } from '../../dtos/addPlayerCategory.dto'
 
 @Injectable()
 export class CategoryRepository implements ICategoryRepository {
@@ -13,6 +14,12 @@ export class CategoryRepository implements ICategoryRepository {
     @InjectModel(Category.name)
     private readonly categoryModel: Model<CategoryDocument>
   ) {}
+
+  addPlayerToCategory(
+    addPlayerToCategory: AddPlayerCategoryParamsDTO
+  ): Promise<Category> {
+    throw new Error('Method not implemented.')
+  }
 
   async updateCategory(
     updateCategoryValues: UpdateCategoryDTO

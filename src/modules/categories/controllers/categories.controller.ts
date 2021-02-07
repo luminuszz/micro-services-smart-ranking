@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common'
 import { ParseStringPipePipe } from '@shared/pipes/parse-string-pipe.pipe'
+import { AddPlayerCategoryParamsDTO } from '../dtos/addPlayerCategory.dto'
 import { createCategoryDTO } from '../dtos/createCategory.dto'
 import { UpdateCategoryDTO } from '../dtos/updateCategory.dto'
 import { Category } from '../interfaces/category.interface'
@@ -58,5 +59,12 @@ export class CategoriesController {
     )
 
     return updatedCategory
+  }
+
+  @Post('/:categoryName/players/:playerId')
+  async addPlayerToCategory(
+    @Param() addCategoryParams: AddPlayerCategoryParamsDTO
+  ): Promise<any> {
+    const { categoryName, playerId } = addCategoryParams
   }
 }

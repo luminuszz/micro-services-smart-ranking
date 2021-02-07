@@ -3,17 +3,17 @@ import { createPlayerDTO } from '../dtos/createPlayer.dto'
 
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
 
-import { PlayerRepository } from '../repositories/player.repository'
 import { Player } from '../interfaces/player.interface'
+import { IPlayerRepository } from '../repositories/playerRepository.inteface'
 
 @Injectable()
 export class PlayersService {
-  constructor(private readonly playerRepository: PlayerRepository) {}
+  constructor(private readonly playerRepository: IPlayerRepository) {}
 
   private readonly logger = new Logger(PlayersService.name)
 
   async createPlayer(createPlayer: createPlayerDTO): Promise<Player> {
-    const { email, name, phoneNumber } = createPlayer
+    const { email, name, phoneNumber, ranking, rankingPosition } = createPlayer
 
     const checkPlayerExists = await this.getOnePlayerByEmail(email)
 
@@ -25,6 +25,8 @@ export class PlayersService {
       email,
       name,
       phoneNumber,
+      ranking,
+      rankingPosition,
     })
 
     return newPlayer
