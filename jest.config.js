@@ -4,6 +4,8 @@ const { pathsToModuleNameMapper } = require('ts-jest/utils')
 const { compilerOptions } = require('./tsconfig.json')
 
 module.exports = {
+  setupFiles: ['dotenv/config'],
+
   clearMocks: true,
   verbose: true,
   collectCoverage: true,
