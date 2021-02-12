@@ -8,8 +8,8 @@ import { MongooseModule } from '@nestjs/mongoose'
 
 @Module({
   imports: [
-    PlayersModule,
     MongooseModule.forRoot(process.env.MONGO_URL, mongooseModuleOptions),
+    PlayersModule,
     CategoriesModule,
   ],
 })

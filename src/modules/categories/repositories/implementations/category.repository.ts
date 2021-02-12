@@ -15,10 +15,28 @@ export class CategoryRepository implements ICategoryRepository {
     private readonly categoryModel: Model<CategoryDocument>
   ) {}
 
-  addPlayerToCategory(
+  async verifyPlayerContainInCategory(
+    playerId: string,
+    categoryName: string
+  ): Promise<boolean> {
+    return false
+  }
+
+  async addPlayerToCategory(
     addPlayerToCategory: AddPlayerCategoryParamsDTO
   ): Promise<Category> {
-    throw new Error('Method not implemented.')
+    const { categoryName, playerId } = addPlayerToCategory
+    const { _id, ...findCategory } = await this.findCategoryByName(categoryName)
+
+    console.log(findCategory.players)
+
+    // findCategory.players.push(playerId)
+
+    const updatedCategory = await this.categoryModel
+      .findByIdAndUpdate(_id, { $set: { ...findCategory } })
+      .exec()
+
+    return updatedCategory
   }
 
   async updateCategory(
@@ -61,7 +79,10 @@ export class CategoryRepository implements ICategoryRepository {
   }
 
   async getAllCategories(): Promise<Category[]> {
-    const categories = await this.categoryModel.find().exec()
+    const categories = await this.categoryModel
+      .find()
+      .populate('players')
+      .exec()
 
     return categories
   }

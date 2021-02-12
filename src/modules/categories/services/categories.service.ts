@@ -5,10 +5,14 @@ import { notFoundExceptionMessage } from '@shared/resources/exceptions'
 import { UpdateCategoryDTO } from '../dtos/updateCategory.dto'
 import { AddPlayerCategoryParamsDTO } from '../dtos/addPlayerCategory.dto'
 import { ICategoryRepository } from '../repositories/categoryRepository.interface'
+import { PlayersService } from '@modules/players/services/players.service'
 
 @Injectable()
 export class CategoriesService {
-  constructor(private readonly categoryRepository: ICategoryRepository) {}
+  constructor(
+    private readonly categoryRepository: ICategoryRepository,
+    private readonly playerService: PlayersService
+  ) {}
 
   async createAndSave(createCategory: createCategoryDTO): Promise<Category> {
     const { category } = createCategory
@@ -82,6 +86,39 @@ export class CategoriesService {
   async addPlayerToCategory(
     addPlayerToCategoryParams: AddPlayerCategoryParamsDTO
   ): Promise<Category> {
-    throw new Error('method not implemented')
+    const { categoryName, playerId } = addPlayerToCategoryParams
+    const verifyCategoryExists = await this.categoryRepository.findCategoryByName(
+      categoryName
+    )
+    if (!verifyCategoryExists) {
+      throw new BadRequestException(`category "${categoryName}" not found`)
+    }
+
+    const verifyIfPlayerExists = await this.playerService.getOnePlayerById(
+      playerId
+    )
+
+    console.log(verifyIfPlayerExists)
+
+    if (!verifyIfPlayerExists) {
+      throw new BadRequestException(`player not found`)
+    }
+
+    const verifyUserIncludesInCategory = await this.categoryRepository.verifyPlayerContainInCategory(
+      playerId,
+      categoryName
+    )
+
+    if (verifyUserIncludesInCategory) {
+      throw new BadRequestException(
+        'This player already registered in this category'
+      )
+    }
+
+    const category = await this.categoryRepository.addPlayerToCategory(
+      addPlayerToCategoryParams
+    )
+
+    return category
   }
 }

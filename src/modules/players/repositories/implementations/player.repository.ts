@@ -24,8 +24,8 @@ export class PlayerRepository implements IPlayerRepository {
     return await this.playerModel.find()
   }
 
-  async getPlayerById(id: string): Promise<Player> {
-    const foundedPlayer = await this.playerModel.findOne({ id })
+  async getPlayerById(_id: string): Promise<Player> {
+    const foundedPlayer = await this.playerModel.findOne({ _id }).exec()
 
     return foundedPlayer
   }

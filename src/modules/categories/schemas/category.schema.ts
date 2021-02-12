@@ -31,7 +31,7 @@ class Category {
   @Prop([Event])
   events: Event[]
 
-  @Prop([MongooseSchema.Types.ObjectId, { ref: Player.name }])
+  @Prop([{ type: MongooseSchema.Types.ObjectId, ref: Player.name }])
   players: Player[]
 }
 

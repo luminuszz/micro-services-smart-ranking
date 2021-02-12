@@ -142,7 +142,8 @@ describe('CategoriesService', () => {
       const newPlayer = TestUtils.getValidPlayerDTO()
       const newCategory = TestUtils.getValidCategoryDTO()
 
-      const { id: playerId } = await playerService.createPlayer(newPlayer)
+      const { _id: playerId } = await playerService.createPlayer(newPlayer)
+
       const { category: categoryName } = await service.createAndSave(
         newCategory
       )
@@ -152,7 +153,54 @@ describe('CategoriesService', () => {
         playerId,
       })
 
-      expect(category).toHaveProperty('id')
+      expect(category).toHaveProperty('_id')
+    })
+
+    it('not should be able to add player to category if Category does not exists', async () => {
+      const newPlayer = TestUtils.getValidPlayerDTO()
+
+      const { _id: playerId } = await playerService.createPlayer(newPlayer)
+
+      await expect(
+        service.addPlayerToCategory({
+          categoryName: 'INVALID CATEGORY',
+          playerId,
+        })
+      ).rejects.toBeInstanceOf(BadRequestException)
+    })
+
+    it('not should be able to add player to category if player does not exists', async () => {
+      const newCategory = TestUtils.getValidCategoryDTO()
+
+      const { category: categoryName } = await service.createAndSave(
+        newCategory
+      )
+
+      await expect(
+        service.addPlayerToCategory({
+          categoryName,
+          playerId: 'INVALID PLAYER ID',
+        })
+      ).rejects.toBeInstanceOf(BadRequestException)
+    })
+
+    it('not should be able to add player to category if player already registered in the category', async () => {
+      const newPlayer = TestUtils.getValidPlayerDTO()
+      const newCategory = TestUtils.getValidCategoryDTO()
+
+      const { _id: playerId } = await playerService.createPlayer(newPlayer)
+      const { category: categoryName, ...rest } = await service.createAndSave(
+        newCategory
+      )
+
+      rest.players.push(playerId)
+
+      await expect(
+        service.addPlayerToCategory({
+          categoryName,
+          playerId,
+        })
+      ).rejects.toBeInstanceOf(BadRequestException)
     })
   })
 })

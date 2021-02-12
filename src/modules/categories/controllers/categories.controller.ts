@@ -66,5 +66,12 @@ export class CategoriesController {
     @Param() addCategoryParams: AddPlayerCategoryParamsDTO
   ): Promise<any> {
     const { categoryName, playerId } = addCategoryParams
+
+    const category = await this.categoriesService.addPlayerToCategory({
+      categoryName,
+      playerId,
+    })
+
+    return category
   }
 }

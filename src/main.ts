@@ -11,7 +11,7 @@ async function CreateCustomAppInstance(): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule)
 
   app.useGlobalPipes(new ValidationPipe())
-  app.useGlobalFilters(new GlobalException())
+  // app.useGlobalFilters(new GlobalException())
 
   app.use(helmet())
 

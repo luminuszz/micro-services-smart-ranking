@@ -19,4 +19,9 @@ export abstract class ICategoryRepository {
   abstract addPlayerToCategory(
     addPlayerToCategory: AddPlayerCategoryParamsDTO
   ): Promise<Category>
+
+  abstract verifyPlayerContainInCategory(
+    playerId: string,
+    categoryName: string
+  ): Promise<boolean>
 }

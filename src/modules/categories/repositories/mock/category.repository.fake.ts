@@ -8,6 +8,17 @@ import { AddPlayerCategoryParamsDTO } from '@modules/categories/dtos/addPlayerCa
 export class FakeCategoryRepository implements ICategoryRepository {
   private categories: Category[] = []
 
+  async verifyPlayerContainInCategory(
+    playerId: string,
+    categoryName: string
+  ): Promise<boolean> {
+    const foundedCategory = await this.findCategoryByName(categoryName)
+
+    const isInclude = foundedCategory.players.includes(playerId)
+
+    return isInclude
+  }
+
   async addPlayerToCategory(
     addPlayerToCategory: AddPlayerCategoryParamsDTO
   ): Promise<Category> {
