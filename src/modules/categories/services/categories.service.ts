@@ -104,12 +104,12 @@ export class CategoriesService {
       throw new BadRequestException(`player not found`)
     }
 
-    const verifyUserIncludesInCategory = await this.categoryRepository.verifyPlayerContainInCategory(
+    const isPlayerIncludedInCategory = await this.categoryRepository.verifyPlayerContainInCategory(
       playerId,
       categoryName
     )
 
-    if (verifyUserIncludesInCategory) {
+    if (isPlayerIncludedInCategory) {
       throw new BadRequestException(
         'This player already registered in this category'
       )

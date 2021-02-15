@@ -19,7 +19,14 @@ export class CategoryRepository implements ICategoryRepository {
     playerId: string,
     categoryName: string
   ): Promise<boolean> {
-    return false
+    const verifyPlayerContainInCategory = await this.categoryModel
+      .find({
+        category: categoryName,
+      })
+      .where('players')
+      .in([playerId])
+
+    return !!verifyPlayerContainInCategory
   }
 
   async addPlayerToCategory(
@@ -28,9 +35,7 @@ export class CategoryRepository implements ICategoryRepository {
     const { categoryName, playerId } = addPlayerToCategory
     const { _id, ...findCategory } = await this.findCategoryByName(categoryName)
 
-    console.log(findCategory.players)
-
-    // findCategory.players.push(playerId)
+    findCategory.players.push(playerId)
 
     const updatedCategory = await this.categoryModel
       .findByIdAndUpdate(_id, { $set: { ...findCategory } })
