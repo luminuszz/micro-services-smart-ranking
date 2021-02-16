@@ -1,5 +1,22 @@
+import {
+  IsNumberNotEmpty,
+  IsStringNotEmpty,
+} from '@shared/decorators/generalValidations.decorator'
+import { IsEmail } from 'class-validator'
+
 export class createPlayerDTO {
-  readonly name: string
-  readonly email: string
-  readonly phoneNumber: string
+  @IsStringNotEmpty()
+  name: string
+
+  @IsEmail()
+  email: string
+
+  @IsStringNotEmpty()
+  phoneNumber: string
+
+  @IsStringNotEmpty()
+  ranking: string
+
+  @IsNumberNotEmpty()
+  rankingPosition: number
 }

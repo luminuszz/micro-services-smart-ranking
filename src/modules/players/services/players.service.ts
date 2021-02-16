@@ -1,19 +1,19 @@
 import { BadRequestException, Injectable, Logger } from '@nestjs/common'
 import { createPlayerDTO } from '../dtos/createPlayer.dto'
-import { Player } from '../interfaces/player.interface'
-import { v4 as uuidV4 } from 'uuid'
-import { formatterJSON } from '@shared/utils/formatters'
-import * as Faker from 'faker'
+
 import { updatePlayerDto } from '../dtos/updatePlayer.dto'
+
+import { Player } from '../interfaces/player.interface'
+import { IPlayerRepository } from '../repositories/playerRepository.inteface'
 
 @Injectable()
 export class PlayersService {
+  constructor(private readonly playerRepository: IPlayerRepository) {}
+
   private readonly logger = new Logger(PlayersService.name)
 
-  private players: Player[] = []
-
   async createPlayer(createPlayer: createPlayerDTO): Promise<Player> {
-    const { email, name, phoneNumber } = createPlayer
+    const { email, name, phoneNumber, ranking, rankingPosition } = createPlayer
 
     const checkPlayerExists = await this.getOnePlayerByEmail(email)
 
@@ -21,62 +21,50 @@ export class PlayersService {
       throw new BadRequestException('This email has already been registered')
     }
 
-    const newPlayer: Player = {
-      _id: uuidV4(),
-      name,
+    const newPlayer = await this.playerRepository.createPlayer({
       email,
+      name,
       phoneNumber,
-      raking: Faker.commerce.product(),
-      avatarUrl: Faker.internet.avatar(),
-      rakingPosition: Faker.random.number(2),
-    }
-
-    this.players.push(newPlayer)
+      ranking,
+      rankingPosition,
+    })
 
     return newPlayer
   }
 
   async updatePlayer(updatePlayer: updatePlayerDto): Promise<Player> {
-    const { _id, ...fields } = updatePlayer
+    const { _id } = updatePlayer
 
     const checkPlayerExists = await this.getOnePlayerById(_id)
 
-    /*    if (!checkPlayerExists) {
+    if (!checkPlayerExists) {
       throw new BadRequestException('Player not found')
-    } */
-
-    const changedPlayer = Object.assign(checkPlayerExists, fields)
-
-    const findIndex = this.players.findIndex(
-      currentPlayer => currentPlayer._id === _id
-    )
-
-    if (findIndex >= 0) {
-      this.players[findIndex] = changedPlayer
     }
 
-    return changedPlayer
+    const changedPlayer = await this.playerRepository.updatePlayer(updatePlayer)
+
+    return changedPlayer as Player
   }
 
   async getOnePlayerByEmail(email: string): Promise<Player | undefined> {
-    const player = this.players.find(player => player.email === email)
+    const player = this.playerRepository.getPlayerByEmail(email)
 
     return player
   }
 
   async getOnePlayerById(id: string): Promise<Player | undefined> {
-    const player = this.players.find(player => player._id === id)
+    const player = this.playerRepository.getPlayerById(id)
 
     return player
   }
 
   async getAllPlayers(): Promise<Player[]> {
-    return this.players
+    const players = await this.playerRepository.getAllPlayers()
+
+    return players
   }
 
   async deletePlayer(id: string): Promise<void> {
-    const filteredPlayers = this.players.filter(player => player._id !== id)
-
-    this.players = filteredPlayers
+    await this.playerRepository.deletePlayer(id)
   }
 }
