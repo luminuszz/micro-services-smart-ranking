@@ -23,7 +23,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "refresh_modules": "docker-compose exec  api yarn"
   },
+  "prepare": "yarn husky install",
   "dependencies": {
+    "@commitlint/cli": "^12.1.1",
     "@nestjs/common": "^7.0.0",
     "@nestjs/core": "^7.0.0",
     "@nestjs/mongoose": "^7.2.2",
@@ -35,6 +37,7 @@
     "dotenv": "^8.2.0",
     "faker": "^5.1.0",
     "helmet": "^4.4.1",
+    "husky": "^6.0.0",
     "mongodb": "^3.6.3",
     "mongoose": "^5.11.14",
     "reflect-metadata": "^0.1.13",
