@@ -1,17 +1,16 @@
 version: '2.0'
 
 services:
+    api:
+        container_name: api-smart-ranking
+        build: .
+        ports:
+            - ${PORT}:${PORT}
+        volumes:
+            - .:/home/api
 
-  api:
-    container_name: api-smart-ranking
-    build: .
-    ports:
-      - ${PORT}:${PORT}
-    volumes:
-      - .:/home/api
-
-  database:
-    container_name: api_smart_ranking_db
-    image: mongo
-    ports:
-    - ${MONGO_PORT}:${MONGO_PORT}
+    database:
+        container_name: api_smart_ranking_db
+        image: mongo
+        ports:
+            - ${MONGO_PORT}:${MONGO_PORT}
