@@ -24,3 +24,4 @@ jobs:
         uses: hrgui/lcov-reporter-action@v0.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./coverage/lcov.info
