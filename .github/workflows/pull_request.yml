@@ -1,27 +1,27 @@
 name: 'PR: TEST'
 
 on:
-  pull_request:
-    types: ['opened', 'synchronize', 'reopened']
-    branches:
-      - develop
-      - master
+    pull_request:
+        types: ['opened', 'synchronize', 'reopened']
+        branches:
+            - develop
+            - master
 
 jobs:
-  tests:
-    runs-on: 'ubuntu-latest'
-    steps:
-      - uses: actions/setup-node@v2
-      - uses: actions/checkout@v2
+    tests:
+        runs-on: 'ubuntu-latest'
+        steps:
+            - uses: actions/setup-node@v2
+            - uses: actions/checkout@v2
 
-      - name: Install dependence
-        run: yarn install
+            - name: Install dependence
+              run: yarn install
 
-      - name: Run tests
-        run: yarn test
+            - name: Run tests
+              run: yarn test
 
-      - name: Get coverage report
-        uses: hrgui/lcov-reporter-action@v0.1.0
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: ./coverage/lcov.info
+            - name: Get coverage report
+              uses: hrgui/lcov-reporter-action@v0.1.0
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  lcov-file: ./coverage/lcov.info
